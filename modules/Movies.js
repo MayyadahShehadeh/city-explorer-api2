@@ -25,7 +25,7 @@ function getMoviesData(req, res) {
         console.log('cashe miss');
         cache[moviesSearchQuery];
         cache[moviesSearchQuery] = moviesArray;
-        console.log('timestamp 222222',cache['timesmap']);
+        console.log('timestamp 22',cache['timesmap']);
 
         res.send(moviesArray);
       });

@@ -3,7 +3,6 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
-const { default: axios } = require("axios");
 
 const getMoviesData = require('./modules/Movies');
 const getWeatherData = require("./modules/Weather");
@@ -12,6 +11,7 @@ const getWeatherData = require("./modules/Weather");
 const server = express();
 
 const PORT = process.env.PORT;
+
 // cors is to give access to use my server
 server.use(cors());
 
@@ -25,6 +25,7 @@ server.get("/", (req, res) => {
 
 server.get("/weather", getWeatherData);
 server.get("/movies", getMoviesData);
+
 
 // ------------ (*) mean all other routes ----------
 server.get("*", (req, res) => {
