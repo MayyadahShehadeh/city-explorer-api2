@@ -1,24 +1,38 @@
 const axios = require("axios");
+const Cache = require("./Cashe");
 
+let cache = new Cache();
+cache['timesmap']=Date.now();
 
 function getMoviesData(req, res) {
     let moviesSearchQuery = req.query.searchQuery;
   
     // http://localhost:3001/movies?searchQuery=seattle
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${moviesSearchQuery}`;
-    console.log("urll", url);
-  
+
+    if ((cache[moviesSearchQuery] && (Date.now() - cache[moviesSearchQuery].timestamp < 50000)) !== undefined){
+    console.log('cashe hit');
+    console.log(cache['timesmap']);
+    
+    res.send(cache[moviesSearchQuery]);
+  }else{
+    
     try {
       axios.get(url).then((moviesData) => {
         let moviesArray = moviesData.data.results.map((item) => {
           return new movieObje(item);
         });
+        console.log('cashe miss');
+        cache[moviesSearchQuery];
+        cache[moviesSearchQuery] = moviesArray;
+        console.log('timestamp 222222',cache['timesmap']);
+
         res.send(moviesArray);
-        console.log(moviesArray);
       });
     } catch (error) {
       res.send(error);
     }
+  }
   }
 
   class movieObje {
